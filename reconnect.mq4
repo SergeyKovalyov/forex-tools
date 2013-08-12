@@ -20,14 +20,14 @@ void init() {
 	return;
 }
 
-void start() {
+void vstart() {
 	int i;
 
 	if (TimeLocal() - last_time < 28) return;
 
 	/*
 	Print(""
-		+ "ticket: " + ticket
+		+ "ticket #" + ticket
 		+ "  last_time: " + last_time
 		+ "  time: " + TimeToStr(last_time, TIME_DATE | TIME_SECONDS)
 	);
@@ -43,6 +43,18 @@ void start() {
 	OrderSelect(ticket, SELECT_BY_TICKET);
 	OrderModify(ticket, OrderOpenPrice() + i * Point, 0, 0, 0);
 	last_time = TimeLocal();
+}
+
+void start() {
+	while (!IsStopped()) {
+		if (!IsConnected()) {
+			Print("error: lost connection");
+			return;
+		}
+		vstart();
+		Sleep(1000);
+	}
+	return;
 }
 
 
