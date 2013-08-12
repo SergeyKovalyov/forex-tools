@@ -32,6 +32,7 @@ void vstart() {
 		+ "  time: " + TimeToStr(last_time, TIME_DATE | TIME_SECONDS)
 	);
 	*/
+	RefreshRates();
 	i = Seconds() - 30;
 	if (i == 0) i = 30;
 	/*
