@@ -16,7 +16,7 @@ void init() {
 	}
 	if (ticket != -1) return;
 
-	ticket = OrderSend(Symbol(), OP_BUYLIMIT, 0.1, Ask - 10000 * Point, 0, 0, 0, "", magic);
+	ticket = OrderSend(Symbol(), OP_BUYLIMIT, 0.1, Ask - 10000 * Point, 0, 0, 0, "reconnect", magic);
 	return;
 }
 
@@ -58,5 +58,8 @@ void start() {
 	return;
 }
 
+void deinit() {
+	OrderDelete(ticket);
+}
 
 
