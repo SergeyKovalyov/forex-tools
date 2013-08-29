@@ -47,8 +47,3 @@ void start() {
 	return;
 }
 
-void deinit() {
-	OrderDelete(ticket);
-}
-
-
