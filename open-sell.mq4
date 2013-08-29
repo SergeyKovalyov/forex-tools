@@ -2,8 +2,10 @@
 #define magic 4210
 
 void start() {
-	int ticket, ticks, slippage;
+	static int ticket;
+	int ticks, slippage;
 
+	if (ticket > 0) return;
 	ticks = GetTickCount();
 	ticket = OrderSend(Symbol(), OP_SELL, 0.01, 0, 0, 0, 0, "open-sell", magic);
 	ticks = GetTickCount() - ticks;
