@@ -1,5 +1,5 @@
 #property copyright "Sergey Kovalyov (sergey.kovalyov@gmail.com)"
-#define magic 42
+#define magic 4212
 
 int last_time = -1, ticket = -1;
 
@@ -16,33 +16,22 @@ void init() {
 	}
 	if (ticket != -1) return;
 
-	ticket = OrderSend(Symbol(), OP_BUYLIMIT, 0.1, Ask - 10000 * Point, 0, 0, 0, "reconnect", magic);
+	ticket = OrderSend(Symbol(), OP_BUYLIMIT, 0.1, Point, 0, 0, 0, "reconnect", magic);
+	last_time = TimeLocal();
 	return;
 }
 
 void vstart() {
-	int i;
+	double price;
 
 	if (TimeLocal() - last_time < 28) return;
-
-	/*
-	Print(""
-		+ "ticket #" + ticket
-		+ "  last_time: " + last_time
-		+ "  time: " + TimeToStr(last_time, TIME_DATE | TIME_SECONDS)
-	);
-	*/
-	RefreshRates();
-	i = Seconds() - 30;
-	if (i == 0) i = 30;
-	/*
-	Print("going to modify ticket #" + ticket
-		+ "  price: " + OrderOpenPrice()
-		+ "  i: " + i
-	);
-	*/
 	OrderSelect(ticket, SELECT_BY_TICKET);
-	OrderModify(ticket, OrderOpenPrice() + i * Point, 0, 0, 0);
+	if (OrderOpenPrice() < 2 * Point) {
+		price = 3 * Point;
+	} else {
+		price = Point;
+	}
+	OrderModify(ticket, price, 0, 0, 0);
 	last_time = TimeLocal();
 }
 
