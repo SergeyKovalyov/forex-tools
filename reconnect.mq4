@@ -6,8 +6,6 @@ int last_time = -1, ticket = -1;
 void init() {
 	int i;
 
-	if (ticket != -1) return;
-
 	for (i = OrdersTotal() - 1; i >= 0; i--) {
 		OrderSelect(i, SELECT_BY_POS);
 		if (OrderType() != OP_BUYLIMIT || OrderMagicNumber() != magic) continue;
