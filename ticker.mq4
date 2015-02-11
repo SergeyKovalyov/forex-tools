@@ -1,33 +1,27 @@
 #property copyright "Sergey Kovalyov (sergey.kovalyov@gmail.com)"
+#property strict
 //
-// saves ticks to file
-// one Bid/Ask pair per file
-
-int idx = 0, prev_time = -1;
-string symb;
-
-
-void init() {
-	symb = Symbol();
-	return;
-}
+// Simple and robust way to pass live price data to other program.
+// This program saves ticks to files one Ask/Bid snapshot per file.
+// Be aware of disk overflow as use of disk space is very inefficient.
+// So, intended usage -- some other program processes tick-files as
+// they come and purges them.
 
 void start() {
-	int time, fh;
-	string fname;
+	static int idx = 0;
+	static long prev_time = -1;
 
-	time = TimeCurrent();
+	long time = TimeLocal();
 	if (time == prev_time) {
 		idx++;
 	} else {
 		idx = 0;
 		prev_time = time;
 	}
-	fname = time + "-" + idx + "-" + symb;
-	fh = FileOpen(fname, FILE_WRITE);
-	FileWrite(fh, Bid, Ask);
+	string fname = "ticks\\" + (string)time + "-" + StringSubstr((string)(idx + 1000), 1, 3) + "-" + _Symbol;
+	int fh = FileOpen(fname, FILE_WRITE);
+	FileWrite(fh, time, Ask, Bid, _Symbol);
 	FileClose(fh);
-	return;
 }
 
 
